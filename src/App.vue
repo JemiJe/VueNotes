@@ -11,7 +11,7 @@ storage.init();
 // randomize note color
 const baseNoteColor = getComputedStyle(document.documentElement).getPropertyValue('--note-bg');
 const getRandomColor = baseColorInHSL => {
-  const rand360 = Math.ceil( Math.random() * 360 * 10 ) % 360;
+  const rand360 = Math.ceil(Math.random() * 360 * 10) % 360;
   return baseColorInHSL.replace(/\(\d+/gm, `(${rand360}`);
 }
 
@@ -33,7 +33,7 @@ export default {
     return {
       notesStorageArr: storage.getStorage().notes
         ? storage.getStorage().notes
-        : [ makeNoteObj('edit your first note...') ]
+        : [makeNoteObj('edit your first note...')]
     }
   },
   created() {
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     addNewNote() {
-      this.notesStorageArr.unshift( makeNoteObj() );
+      this.notesStorageArr.unshift(makeNoteObj());
       // this.notesStorageArr = this.notesStorageArr.sort((note1, note2) => note1.dateCreated < note2.dateCreated ? 1 : -1);
     },
     saveNote(changedNote) {
@@ -56,16 +56,16 @@ export default {
       });
       this.notesStorageArr = [...tempArr];
 
-      storage.chageStorage( storage => {
+      storage.chageStorage(storage => {
         storage.notes = [...this.notesStorageArr];
-      } );
+      });
     },
     deleteNote(noteId) {
       this.notesStorageArr = this.notesStorageArr.filter((note) => note.id !== noteId);
 
-      storage.chageStorage( storage => {
+      storage.chageStorage(storage => {
         storage.notes = [...this.notesStorageArr];
-      } );
+      });
     },
   }
 }
@@ -91,6 +91,8 @@ header {
 }
 
 .app-controls {
+  display: flex;
+  justify-content: center;
   padding: 0 2em;
 }
 </style>

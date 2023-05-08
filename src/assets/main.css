@@ -24,6 +24,10 @@ textarea {
     background-color: var(--btn-bg);
     cursor: pointer;
 }
+.btn.note-delete {
+    background: none;
+} 
+
 
 .btn:hover {
     background-color: var(--btn-bg-hover);
