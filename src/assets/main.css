@@ -1,0 +1,35 @@
+@import './normalize.css';
+@import './base.css';
+
+body {
+    font-family: sans-serif;
+    background-color: var(--body-bg);
+}
+
+body, .note, .btn {
+    color: var(--document-text);
+}
+
+textarea {
+    color: var(--textarea-text);
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.btn {
+    border: none;
+    padding: 0.5em 0.5em;
+    background-color: var(--btn-bg);
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: var(--btn-bg-hover);
+}
+
+.btn:active {
+    background-color: var(--btn-bg-active);
+    color: var(--btn-bg);
+}
