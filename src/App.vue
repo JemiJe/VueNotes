@@ -75,7 +75,7 @@ export default {
   <header>VueNotes</header>
 
   <div class="app-controls">
-    <button @click="addNewNote" class="btn">Add new note</button>
+    <button @click="addNewNote" class="btn note-add">Add new note</button>
   </div>
 
   <NotesBoard :notesArr="notesStorageArr" />

@@ -26,7 +26,11 @@ textarea {
 }
 .btn.note-delete {
     background: none;
-} 
+}
+.btn.note-add {
+    font-size: 1.2em;
+    box-shadow: var(--shadow);
+}
 
 
 .btn:hover {

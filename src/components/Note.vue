@@ -59,9 +59,9 @@ export default {
   margin: 1em;
   padding: 1em;
   
-  /* outline: 1px solid var(--note-border); */
-  box-shadow: 0px 3px 6px -3px var(--note-shadow);
-  /* border-radius: 0.3em; */
+  font-size: 1.1em;
+  
+  box-shadow: var(--shadow);
   background-color: var(--note-bg);
 }
 
@@ -81,16 +81,14 @@ export default {
   background-color: var(--note-bg);
 }
 
-/*.note textarea:focus {
-  outline: 1px solid lightblue;
-}*/
-
 .note .note-controls {
   display: flex;
   justify-content: flex-end;
 }
 
-/* .note .btn:hover {
-  background-color: var(--btn-close-bg-hover);
-} */
+@media screen and (max-width: 550px) {
+  .note {
+    width: 100%;
+  }
+}
 </style>
