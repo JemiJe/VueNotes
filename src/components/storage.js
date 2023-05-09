@@ -11,7 +11,7 @@ const storage = {
         return JSON.parse(localStorage.getItem('VueNotes'));
     },
 
-    chageStorage(func) {
+    changeStorage(func) {
         let storageObj = JSON.parse(localStorage.getItem('VueNotes'));
         func(storageObj);
         localStorage.setItem('VueNotes', JSON.stringify(storageObj));

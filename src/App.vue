@@ -8,11 +8,9 @@ import NotesBoard from './components/NotesBoard.vue';
 </script>
 
 <script>
-storage.init();
-
 // randomize note color
 const baseNoteColor = getComputedStyle(document.documentElement).getPropertyValue('--note-bg');
-const getRandomColor = baseColorInHSL => {
+function getRandomColor(baseColorInHSL) {
   const rand360 = Math.ceil(Math.random() * 360 * 10) % 360;
   const newBgColor = baseColorInHSL.replace(/\(\d+/gm, `(${rand360}`);
   const newTextColor = newBgColor.replace(/\s\d+%\)/gm, ` 35%)`);
@@ -22,7 +20,7 @@ const getRandomColor = baseColorInHSL => {
   };
 }
 
-const makeNoteObj = customText => {
+function makeNoteObj(customText) {
   return {
     id: Math.ceil(Math.random() * new Date().getTime()),
     styleObj: {
@@ -34,15 +32,19 @@ const makeNoteObj = customText => {
   }
 };
 
+// inits
+storage.init();
+if( !storage.getStorage().notes ) {
+  storage.changeStorage( storage => storage.notes = [makeNoteObj('edit your first note...')] );
+}
+
 // App component
 export default {
   data() {
     return {
-      notesStorageArr: storage.getStorage().notes
-        ? storage.getStorage().notes
-        : [makeNoteObj('edit your first note...')],
+      notesStorageArr: storage.getStorage().notes,
       searchValue: '',
-      searchNotesArr: ''
+      searchNotesArr: []
     }
   },
   created() {
@@ -61,7 +63,7 @@ export default {
     },
     addNewNote() {
 
-      storage.chageStorage(storage => {
+      storage.changeStorage(storage => {
         const newNote = makeNoteObj();
         
         storage.notes.unshift(newNote);
@@ -72,7 +74,7 @@ export default {
     },
     saveNote(changedNote) { 
 
-      storage.chageStorage(storage => {
+      storage.changeStorage(storage => {
         storage.notes = storage.notes.map(note => {
           if (note.id === changedNote.id) note = { ...note, ...changedNote };
           return { ...note };
@@ -83,7 +85,7 @@ export default {
     },
     deleteNote(noteId) {
 
-      storage.chageStorage(storage => {
+      storage.changeStorage(storage => {
         storage.notes = storage.notes.filter((note) => note.id !== noteId);
         this.searchNotesArr = this.searchNotesArr.filter((note) => note.id !== noteId);
       });
