@@ -1,5 +1,7 @@
 <script setup>
 // notes stores in storage.notes property
+// basic core entity for add/change/delete is storage.getStorage().notes (from localStorage)
+// notesStorageArr used for displaying 
 
 import storage from './components/storage';
 import NotesBoard from './components/NotesBoard.vue';
@@ -12,14 +14,19 @@ storage.init();
 const baseNoteColor = getComputedStyle(document.documentElement).getPropertyValue('--note-bg');
 const getRandomColor = baseColorInHSL => {
   const rand360 = Math.ceil(Math.random() * 360 * 10) % 360;
-  return baseColorInHSL.replace(/\(\d+/gm, `(${rand360}`);
+  const newBgColor = baseColorInHSL.replace(/\(\d+/gm, `(${rand360}`);
+  const newTextColor = newBgColor.replace(/\s\d+%\)/gm, ` 35%)`);
+  return {
+    backgroundColor: newBgColor,
+    color: newTextColor,
+  };
 }
 
 const makeNoteObj = customText => {
   return {
     id: Math.ceil(Math.random() * new Date().getTime()),
     styleObj: {
-      backgroundColor: getRandomColor(baseNoteColor)
+      note: getRandomColor(baseNoteColor),
     },
     text: customText ? customText : '',
     dateCreated: new Date(),
@@ -33,7 +40,9 @@ export default {
     return {
       notesStorageArr: storage.getStorage().notes
         ? storage.getStorage().notes
-        : [makeNoteObj('edit your first note...')]
+        : [makeNoteObj('edit your first note...')],
+      searchValue: '',
+      searchNotesArr: ''
     }
   },
   created() {
@@ -45,28 +54,54 @@ export default {
     });
   },
   methods: {
-    addNewNote() {
-      this.notesStorageArr.unshift(makeNoteObj());
-      // this.notesStorageArr = this.notesStorageArr.sort((note1, note2) => note1.dateCreated < note2.dateCreated ? 1 : -1);
+    renderNotes() {
+      this.notesStorageArr = this.searchValue 
+      ? [...this.searchNotesArr]
+      : [...storage.getStorage().notes];
     },
-    saveNote(changedNote) {
-      let tempArr = [...this.notesStorageArr].map(note => {
-        if (note.id === changedNote.id) note = { ...note, ...changedNote };
-        return { ...note };
-      });
-      this.notesStorageArr = [...tempArr];
+    addNewNote() {
 
       storage.chageStorage(storage => {
-        storage.notes = [...this.notesStorageArr];
+        const newNote = makeNoteObj();
+        
+        storage.notes.unshift(newNote);
+        if(this.searchNotesArr) this.searchNotesArr.unshift(newNote);
       });
+
+      this.renderNotes();
+    },
+    saveNote(changedNote) { 
+
+      storage.chageStorage(storage => {
+        storage.notes = storage.notes.map(note => {
+          if (note.id === changedNote.id) note = { ...note, ...changedNote };
+          return { ...note };
+        });
+      });
+
+      this.renderNotes();
     },
     deleteNote(noteId) {
-      this.notesStorageArr = this.notesStorageArr.filter((note) => note.id !== noteId);
 
       storage.chageStorage(storage => {
-        storage.notes = [...this.notesStorageArr];
+        storage.notes = storage.notes.filter((note) => note.id !== noteId);
+        this.searchNotesArr = this.searchNotesArr.filter((note) => note.id !== noteId);
       });
+
+      this.renderNotes();
     },
+    searchNotes() {
+      if(this.searchValue) {
+
+        this.searchNotesArr = [...storage.getStorage().notes].filter(note => {
+          return note.text.includes( this.searchValue.trim() );
+        });
+        this.notesStorageArr = [...this.searchNotesArr];
+
+      } else {
+        this.notesStorageArr = [...storage.getStorage().notes];
+      }
+    }
   }
 }
 </script>
@@ -76,6 +111,7 @@ export default {
 
   <div class="app-controls">
     <button @click="addNewNote" class="btn note-add">Add new note</button>
+    <input v-model="searchValue" @input="searchNotes" type="text" class="note-search" id="note-search" placeholder="search...">
   </div>
 
   <NotesBoard :notesArr="notesStorageArr" />
@@ -92,7 +128,13 @@ header {
 
 .app-controls {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   padding: 0 2em;
+}
+
+.app-controls>button,
+.app-controls>input {
+  margin: 0.3em;
 }
 </style>

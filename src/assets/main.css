@@ -31,13 +31,21 @@ textarea {
     font-size: 1.2em;
     box-shadow: var(--shadow);
 }
-
-
 .btn:hover {
     background-color: var(--btn-bg-hover);
 }
 
 .btn:active {
+    background-color: var(--btn-bg-active);
+    color: var(--btn-bg);
+}
+
+input.note-search {
+    width: 10em;
+    padding: 0 0.5em;
+    
+    border: none;
+    outline: none;
     background-color: var(--btn-bg-active);
     color: var(--btn-bg);
 }

@@ -33,7 +33,7 @@ export default {
 <template>
   <div 
     class="note"
-    :style="styleObject"
+    :style="styleObject.note"
     @mouseenter="toggleContols"
     @mouseleave="toggleContols"
   >
@@ -41,7 +41,7 @@ export default {
       <button @click="deleteNote" class="note-delete btn" id="noteDelete">&#10006;</button>
     </div>
     <textarea
-      :style="styleObject"
+      :style="styleObject.note"
       class="note-textarea"
       v-model="noteText"
       @focusout="saveNote"

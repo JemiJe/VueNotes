@@ -4,6 +4,7 @@ https://coolors.co/palette/22223b-4a4e69-9a8c98-c9ada7-f2e9e4
 */
 :root {
   --body-bg: #9a8c98;
+  /* note-bg should be in HSL */
   --note-bg: hsl(11, 24%, 72%);
   --note-border: #f2e9e4;
   --note-shadow: #4a4e69;
