@@ -25,6 +25,7 @@ textarea {
     cursor: pointer;
 }
 .btn.note-delete {
+    padding: 0.5em 1em;
     background: none;
 }
 .btn.note-add {

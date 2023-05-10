@@ -8,7 +8,8 @@ export default {
     return {
       controlsIsHidden: true,
       noteText: this.text,
-      styleObject: this.style
+      styleObject: this.style,
+      isActive: false,
     }
   },
   props: ['id', 'text', 'style'],
@@ -17,6 +18,7 @@ export default {
       this.controlsIsHidden = !this.controlsIsHidden;
     },
     saveNote() {
+      this.deactivateNote();
       this.emitter.emit('note-updated', {
         id: this.id,
         text: this.noteText,
@@ -24,7 +26,20 @@ export default {
       });
     },
     deleteNote() {
-      this.emitter.emit('note-deleted', this.id);
+      if(this.isActive) {
+        this.deactivateNote();
+      } else {
+        this.emitter.emit('note-deleted', this.id);
+      }
+    },
+    activateNote() {
+      this.isActive = true;
+      const windowScrollPos = Math.floor(document.documentElement.scrollTop);
+      this.styleObject.note.top = `calc(${windowScrollPos}px + 1em)`;
+    },
+    deactivateNote() {
+      this.isActive = false;
+      this.styleObject.note.top = 'auto';
     },
   }
 }
@@ -33,18 +48,27 @@ export default {
 <template>
   <div 
     class="note"
-    :style="styleObject.note"
-    @mouseenter="toggleContols"
+    :class="this.isActive ? 'note-active' : ''"
+    :style="styleObject.note" 
+    @mouseenter="toggleContols" 
     @mouseleave="toggleContols"
   >
+    
     <div class="note-controls" :class="controlsIsHidden ? 'hidden' : ''">
-      <button @click="deleteNote" class="note-delete btn" id="noteDelete">&#10006;</button>
+      <button 
+        @click="deleteNote" 
+        class="note-delete btn" 
+        id="noteDelete"
+      >&#10006;</button>
     </div>
-    <textarea
-      :style="styleObject.note"
-      class="note-textarea"
-      v-model="noteText"
+    
+    <textarea 
+      :style="styleObject.note" 
+      class="note-textarea" 
+      v-model="noteText" 
       @focusout="saveNote"
+      @focus="activateNote"
+      placeholder="start your note..."
     >
       {{ noteText }}
     </textarea>
@@ -55,24 +79,31 @@ export default {
 .note {
   position: relative;
   width: 10em;
-  height: 10em;
+  height: var(--note-height);
   margin: 1em;
-  padding: 1em;
-  
+  padding: 0 1em 1em;
+
   font-size: 1.1em;
-  
+
   box-shadow: var(--shadow);
   background-color: var(--note-bg);
 }
 
+.note.note-active {
+  position: absolute;
+  height: var(--note-active-height);
+  width: 90vw;
+  z-index: 2;
+}
+
 .note textarea {
   width: 100%;
-  height: 8em;
-  margin: 0;
+  height: calc(var(--note-height) - 2em);
+  margin: 2em 0 0;
   padding: 0;
 
   border: none;
-  overflow: auto;
+  overflow: hidden;
   outline: none;
   box-shadow: none;
   resize: none;
@@ -81,7 +112,15 @@ export default {
   background-color: var(--note-bg);
 }
 
+.note.note-active textarea {
+  overflow: auto;
+  height: calc(var(--note-active-height) - 2em);
+}
+
 .note .note-controls {
+  position: absolute;
+  right: 0;
+
   display: flex;
   justify-content: flex-end;
 }

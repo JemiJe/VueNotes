@@ -33,9 +33,13 @@ export default {
 
 <style>
 .note-board {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  
+  max-width: 70em;
+  margin: auto;
   padding: 1em;
 }
 </style>
