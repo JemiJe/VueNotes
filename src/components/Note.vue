@@ -3,6 +3,8 @@
 <script>
 // import EventBus from '@/eventBus';
 
+const breakpointPhone = 550;
+
 export default {
   data() {
     return {
@@ -34,8 +36,12 @@ export default {
     },
     activateNote() {
       this.isActive = true;
-      const windowScrollPos = Math.floor(document.documentElement.scrollTop);
-      this.styleObject.note.top = `calc(${windowScrollPos}px + 1em)`;
+
+      // put note to properly position for wide screens
+      if( window.innerWidth > breakpointPhone ) {
+        const windowScrollPos = Math.floor(document.documentElement.scrollTop);
+        this.styleObject.note.top = `calc(${windowScrollPos}px + 1em)`;
+      }
     },
     deactivateNote() {
       this.isActive = false;
@@ -94,6 +100,14 @@ export default {
   height: var(--note-active-height);
   width: 90vw;
   z-index: 2;
+}
+
+@media screen and (max-width: 550px) {
+  .note.note-active {
+    position: relative;
+    height: var(--note-active-height);
+    width: 90vw;
+  }
 }
 
 .note textarea {
