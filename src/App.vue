@@ -44,7 +44,7 @@ export default {
     return {
       notesStorageArr: storage.getStorage().notes,
       searchValue: '',
-      searchNotesArr: []
+      searchNotesArr: [],
     }
   },
   created() {
@@ -116,7 +116,10 @@ export default {
     <input v-model="searchValue" @input="searchNotes" type="text" class="note-search" id="note-search" placeholder="search...">
   </div>
 
-  <NotesBoard :notesArr="notesStorageArr" />
+  <NotesBoard 
+    ref="board"
+    :notesArr="notesStorageArr"
+  />
 </template>
 
 <style>

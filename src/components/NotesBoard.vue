@@ -1,6 +1,5 @@
 <script setup>
 import Note from './Note.vue'
-import storage from './storage';
 </script>
 
 <script>

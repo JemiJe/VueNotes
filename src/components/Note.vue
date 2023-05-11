@@ -39,13 +39,16 @@ export default {
 
       // put note to properly position for wide screens
       if( window.innerWidth > breakpointPhone ) {
+        // const noteBoardTop = this.$refs.note.parentElement.offsetTop;
+        const noteBoardTop = this.$refs.note.closest(".note-board").offsetTop;
         const windowScrollPos = Math.floor(document.documentElement.scrollTop);
-        this.styleObject.note.top = `calc(${windowScrollPos}px + 1em)`;
+        this.styleObject.note.top = `${windowScrollPos - noteBoardTop}px`;
       }
     },
     deactivateNote() {
       this.isActive = false;
       this.styleObject.note.top = 'auto';
+      this.$refs.note.top = 'auto';
     },
   }
 }
@@ -54,6 +57,7 @@ export default {
 <template>
   <div 
     class="note"
+    ref="note"
     :class="this.isActive ? 'note-active' : ''"
     :style="styleObject.note" 
     @mouseenter="toggleContols" 
@@ -98,7 +102,8 @@ export default {
 .note.note-active {
   position: absolute;
   height: var(--note-active-height);
-  width: 90vw;
+  width: 50vw;
+  margin-top: 15%;
   z-index: 2;
 }
 
