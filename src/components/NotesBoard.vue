@@ -10,11 +10,6 @@ export default {
     }
   },
   props: ['notesArr'],
-  computed: {
-    newNotesArr() {
-
-    }
-  },
 }
 </script>
 

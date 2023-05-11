@@ -116,10 +116,7 @@ export default {
     <input v-model="searchValue" @input="searchNotes" type="text" class="note-search" id="note-search" placeholder="search...">
   </div>
 
-  <NotesBoard 
-    ref="board"
-    :notesArr="notesStorageArr"
-  />
+  <NotesBoard :notesArr="notesStorageArr" />
 </template>
 
 <style>

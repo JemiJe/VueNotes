@@ -47,8 +47,10 @@ export default {
     },
     deactivateNote() {
       this.isActive = false;
-      this.styleObject.note.top = 'auto';
-      this.$refs.note.top = 'auto';
+
+      if( window.innerWidth > breakpointPhone ) {
+        this.styleObject.note.top = 'auto';
+      }
     },
   }
 }
@@ -112,6 +114,7 @@ export default {
     position: relative;
     height: var(--note-active-height);
     width: 90vw;
+    margin-top: initial;
   }
 }
 
