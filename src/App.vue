@@ -95,8 +95,12 @@ export default {
     searchNotes() {
       if(this.searchValue) {
 
+        const searchValue = this.searchValue.toLocaleLowerCase().trim();
         this.searchNotesArr = [...storage.getStorage().notes].filter(note => {
-          return note.text.includes( this.searchValue.trim() );
+          
+          const noteText = note.text.toLocaleLowerCase();
+          
+          return noteText.includes( searchValue );
         });
         this.notesStorageArr = [...this.searchNotesArr];
 
