@@ -34,6 +34,6 @@ export default {
   
   max-width: 70em;
   margin: auto;
-  padding: 1em;
+  padding: 3em 1em 1em;
 }
 </style>

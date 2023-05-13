@@ -11,11 +11,22 @@ export default {
       controlsIsHidden: true,
       noteText: this.text,
       styleObject: this.style,
+      rotateDeg: Math.ceil( -2 + Math.random() * 4 ),
       isActive: false,
+      isRotated: true,
     }
   },
   props: ['id', 'text', 'style'],
+  mounted() {
+    this.randomRotate();
+  },
+  updated() {
+    this.randomRotate();
+  },
   methods: {
+    randomRotate() {
+      this.$refs.note.style.transform = this.isRotated ? `rotate(${this.rotateDeg}deg)` : 'rotate(0deg)';
+    },
     toggleContols() {
       this.controlsIsHidden = !this.controlsIsHidden;
     },
@@ -36,6 +47,7 @@ export default {
     },
     activateNote() {
       this.isActive = true;
+      this.isRotated = false;
 
       // put note to properly position for wide screens
       if( window.innerWidth > breakpointPhone ) {
@@ -47,6 +59,7 @@ export default {
     },
     deactivateNote() {
       this.isActive = false;
+      this.isRotated = true;
 
       if( window.innerWidth > breakpointPhone ) {
         this.styleObject.note.top = 'auto';
@@ -92,7 +105,6 @@ export default {
   position: relative;
   width: 10em;
   height: var(--note-height);
-  margin: 1em;
   padding: 0 1em 1em;
 
   font-size: 1.1em;
@@ -110,6 +122,11 @@ export default {
 }
 
 @media screen and (max-width: 550px) {
+
+  .note {
+    margin: -2em 1em 0;
+  }
+
   .note.note-active {
     position: relative;
     height: var(--note-active-height);
