@@ -60,6 +60,8 @@ export default {
       this.notesStorageArr = this.searchValue 
       ? [...this.searchNotesArr]
       : [...storage.getStorage().notes];
+
+      this.notesStorageArr = this.notesStorageArr.sort(note => note.isPinned ? 1 : 0);
     },
     addNewNote() {
 

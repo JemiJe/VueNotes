@@ -17,9 +17,7 @@ export default {
   <div class="note-board">
     <Note 
       v-for="note in notesArr"
-      :id="note.id"
-      :style="note.styleObj"
-      :text="note.text" 
+      :noteObj="note"
       :key="note.id"
     />
   </div>
@@ -34,6 +32,6 @@ export default {
   
   max-width: 70em;
   margin: auto;
-  padding: 3em 1em 1em;
+  padding: 1em;
 }
 </style>

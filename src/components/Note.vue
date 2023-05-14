@@ -9,45 +9,42 @@ export default {
   data() {
     return {
       controlsIsHidden: true,
-      noteText: this.text,
-      styleObject: this.style,
-      rotateDeg: Math.ceil( -2 + Math.random() * 4 ),
+      noteText: this.noteObj.text,
+      styleObject: this.noteObj.styleObj,
       isActive: false,
-      isRotated: true,
+      isPinned: false,
     }
   },
-  props: ['id', 'text', 'style'],
-  mounted() {
-    this.randomRotate();
-  },
-  updated() {
-    this.randomRotate();
-  },
+  props: ['noteObj'],
   methods: {
-    randomRotate() {
-      this.$refs.note.style.transform = this.isRotated ? `rotate(${this.rotateDeg}deg)` : 'rotate(0deg)';
-    },
     toggleContols() {
       this.controlsIsHidden = !this.controlsIsHidden;
     },
     saveNote() {
       this.deactivateNote();
       this.emitter.emit('note-updated', {
-        id: this.id,
+        id: this.noteObj.id,
         text: this.noteText,
         dateEdited: new Date(),
+        isPinned: this.isPinned,
       });
     },
     deleteNote() {
       if(this.isActive) {
         this.deactivateNote();
       } else {
-        this.emitter.emit('note-deleted', this.id);
+        this.emitter.emit('note-deleted', this.noteObj.id);
       }
+    },
+    pinNote() {
+      this.isPinned = !this.isPinned;
+
+      this.emitter.emit('note-updated', {
+        isPinned: this.isPinned,
+      });
     },
     activateNote() {
       this.isActive = true;
-      this.isRotated = false;
 
       // put note to properly position for wide screens
       if( window.innerWidth > breakpointPhone ) {
@@ -59,7 +56,6 @@ export default {
     },
     deactivateNote() {
       this.isActive = false;
-      this.isRotated = true;
 
       if( window.innerWidth > breakpointPhone ) {
         this.styleObject.note.top = 'auto';
@@ -74,15 +70,22 @@ export default {
     class="note"
     ref="note"
     :class="this.isActive ? 'note-active' : ''"
-    :style="styleObject.note" 
+    :style="this.styleObject.note" 
     @mouseenter="toggleContols" 
     @mouseleave="toggleContols"
   >
-    
+    <div :class="isPinned ? 'note-pinned-badge' : 'hidden'"></div>
     <div class="note-controls" :class="controlsIsHidden ? 'hidden' : ''">
+      
+      <button 
+        @click="pinNote" 
+        class="btn btn-control" 
+        id="pinNote"
+      >&#10004;</button>
+      
       <button 
         @click="deleteNote" 
-        class="note-delete btn" 
+        class="btn btn-control" 
         id="noteDelete"
       >&#10006;</button>
     </div>
@@ -105,6 +108,7 @@ export default {
   position: relative;
   width: 10em;
   height: var(--note-height);
+  margin: 0.5em;
   padding: 0 1em 1em;
 
   font-size: 1.1em;
@@ -123,15 +127,12 @@ export default {
 
 @media screen and (max-width: 550px) {
 
-  .note {
-    margin: -2em 1em 0;
-  }
-
   .note.note-active {
     position: relative;
     height: var(--note-active-height);
     width: 90vw;
     margin-top: initial;
+    transform: scale(1.05);
   }
 }
 
@@ -168,5 +169,13 @@ export default {
   .note {
     width: 100%;
   }
+}
+.note-pinned-badge {
+  height: 0.25em;
+  background-color: var(--note-pinned-badge);
+  width: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 3;
 }
 </style>

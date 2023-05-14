@@ -24,7 +24,7 @@ textarea {
     background-color: var(--btn-bg);
     cursor: pointer;
 }
-.btn.note-delete {
+.btn-control {
     padding: 0.5em 1em;
     background: none;
 }
