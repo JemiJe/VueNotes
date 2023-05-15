@@ -41,6 +41,16 @@ textarea {
     color: var(--btn-bg);
 }
 
+.btn.btn-pin > div {
+
+    width: 1em;
+    height: 1em;
+
+    background-image: url('./icons8-pin-24.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 input.note-search {
     width: 10em;
     padding: 0 0.5em;

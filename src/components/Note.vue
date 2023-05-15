@@ -12,7 +12,7 @@ export default {
       noteText: this.noteObj.text,
       styleObject: this.noteObj.styleObj,
       isActive: false,
-      isPinned: false,
+      isPinnedNote: this.noteObj.isPinned,
     }
   },
   props: ['noteObj'],
@@ -26,7 +26,7 @@ export default {
         id: this.noteObj.id,
         text: this.noteText,
         dateEdited: new Date(),
-        isPinned: this.isPinned,
+        isPinned: this.isPinnedNote,
       });
     },
     deleteNote() {
@@ -37,11 +37,8 @@ export default {
       }
     },
     pinNote() {
-      this.isPinned = !this.isPinned;
-
-      this.emitter.emit('note-updated', {
-        isPinned: this.isPinned,
-      });
+      this.isPinnedNote = !this.isPinnedNote;
+      this.saveNote();
     },
     activateNote() {
       this.isActive = true;
@@ -74,14 +71,14 @@ export default {
     @mouseenter="toggleContols" 
     @mouseleave="toggleContols"
   >
-    <div :class="isPinned ? 'note-pinned-badge' : 'hidden'"></div>
+    <div :class="isPinnedNote ? 'note-pinned-badge' : 'hidden'"><div></div></div>
     <div class="note-controls" :class="controlsIsHidden ? 'hidden' : ''">
       
       <button 
         @click="pinNote" 
-        class="btn btn-control" 
+        class="btn btn-control btn-pin" 
         id="pinNote"
-      >&#10004;</button>
+      ><div></div></button>
       
       <button 
         @click="deleteNote" 
@@ -122,7 +119,7 @@ export default {
   height: var(--note-active-height);
   width: 50vw;
   margin-top: 15%;
-  z-index: 2;
+  z-index: 5;
 }
 
 @media screen and (max-width: 550px) {
@@ -134,6 +131,11 @@ export default {
     margin-top: initial;
     transform: scale(1.05);
   }
+}
+
+.note textarea,
+.note .note-controls {
+  z-index: 2;
 }
 
 .note textarea {
@@ -171,11 +173,19 @@ export default {
   }
 }
 .note-pinned-badge {
-  height: 0.25em;
-  background-color: var(--note-pinned-badge);
-  width: 100%;
   position: absolute;
-  left: 0;
-  z-index: 3;
+  left: -0.5em;
+  top: -1.1em;
+  z-index: 1;
+  padding: 0.5em;
+}
+
+.note-pinned-badge > div {
+  width: 1.8em;
+  height: 1.8em;
+  
+  background-image: url('../assets/icons8-round-pushpin-48.png');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 </style>

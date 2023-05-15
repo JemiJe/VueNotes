@@ -29,6 +29,7 @@ function makeNoteObj(customText) {
     text: customText ? customText : '',
     dateCreated: new Date(),
     dateEdited: '',
+    isPinned: false,
   }
 };
 
@@ -48,12 +49,15 @@ export default {
     }
   },
   created() {
+    // to save you should to pass note.id among others properties
     this.emitter.on('note-updated', noteObj => {
       this.saveNote(noteObj);
     });
     this.emitter.on('note-deleted', noteId => {
       this.deleteNote(noteId);
     });
+
+    this.renderNotes();
   },
   methods: {
     renderNotes() {
@@ -61,7 +65,9 @@ export default {
       ? [...this.searchNotesArr]
       : [...storage.getStorage().notes];
 
-      this.notesStorageArr = this.notesStorageArr.sort(note => note.isPinned ? 1 : 0);
+      this.notesStorageArr = [...this.notesStorageArr].sort((note1, note2) => {
+        return note1.isPinned > note2.isPinned ? -1 : 1;
+      });
     },
     addNewNote() {
 
