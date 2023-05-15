@@ -52,12 +52,29 @@ export default {
       }
     },
     deactivateNote() {
+      // return false;
       this.isActive = false;
 
       if( window.innerWidth > breakpointPhone ) {
         this.styleObject.note.top = 'auto';
       }
     },
+    getNoteDates() {
+      
+      const options = ['en-GB', { hour12: false, }];
+      const { dateEdited, dateCreated } = this.noteObj;
+      
+      const full = {
+        created: 'created: ' + new Date(dateCreated).toLocaleString(...options),
+        edited: 'edited: ' + new Date(dateEdited).toLocaleString(...options),
+      };
+      const short = {
+        created: new Date(dateCreated).toLocaleDateString(options[0]),
+        edited: new Date(dateEdited).toLocaleDateString(options[0]),
+      };
+      
+      return this.isActive ? full : short;
+    }
   }
 }
 </script>
@@ -97,6 +114,14 @@ export default {
     >
       {{ noteText }}
     </textarea>
+
+    <div 
+      class="note-date" 
+      :class="controlsIsHidden ? 'hidden' : isActive ? 'note-date note-date-active' : ''"
+    >
+      <span>{{this.getNoteDates().edited}}</span>
+      <span v-if="isActive">{{this.getNoteDates().created}}</span>
+    </div>
   </div>
 </template>
 
@@ -174,10 +199,9 @@ export default {
 }
 .note-pinned-badge {
   position: absolute;
-  left: -0.5em;
-  top: -1.1em;
+  left: 0;
+  top: -0.5em;
   z-index: 1;
-  padding: 0.5em;
 }
 
 .note-pinned-badge > div {
@@ -187,5 +211,28 @@ export default {
   background-image: url('../assets/icons8-round-pushpin-48.png');
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.note .note-date {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0.3em;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  
+  color: var(--note-date-color);
+  font-size: 0.7em;
+  z-index: 1;
+}
+
+.note .note-date span {
+  margin: 0 0.5em;
+}
+
+.note .note-date.note-date-active {
+  padding: 0.3em;
 }
 </style>

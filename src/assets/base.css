@@ -7,6 +7,7 @@ https://coolors.co/palette/22223b-4a4e69-9a8c98-c9ada7-f2e9e4
   /* note-bg should be in HSL */
   --note-bg: hsl(11, 24%, 72%);
   --note-shadow-color: #4a4e69;
+  --note-date-color: #4a4e6984;
 
   --document-text: #4a4e69;
   --textarea-text: #22223b;

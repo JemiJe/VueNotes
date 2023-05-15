@@ -28,7 +28,7 @@ function makeNoteObj(customText) {
     },
     text: customText ? customText : '',
     dateCreated: new Date(),
-    dateEdited: '',
+    dateEdited: new Date(),
     isPinned: false,
   }
 };
@@ -65,9 +65,7 @@ export default {
       ? [...this.searchNotesArr]
       : [...storage.getStorage().notes];
 
-      this.notesStorageArr = [...this.notesStorageArr].sort((note1, note2) => {
-        return note1.isPinned > note2.isPinned ? -1 : 1;
-      });
+      this.pinnedToTop();
     },
     addNewNote() {
 
@@ -110,12 +108,21 @@ export default {
           
           return noteText.includes( searchValue );
         });
+        
         this.notesStorageArr = [...this.searchNotesArr];
 
+        this.pinnedToTop();
+
       } else {
-        this.notesStorageArr = [...storage.getStorage().notes];
+        // this.notesStorageArr = [...storage.getStorage().notes];
+        this.renderNotes();
       }
-    }
+    },
+    pinnedToTop() {
+      this.notesStorageArr = [...this.notesStorageArr].sort((note1, note2) => {
+        return note1.isPinned > note2.isPinned ? -1 : 1;
+      });
+    },
   }
 }
 </script>
