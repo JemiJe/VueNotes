@@ -128,12 +128,12 @@ export default {
 <style>
 .note {
   position: relative;
-  width: 10em;
+  width: 15em;
   height: var(--note-height);
   margin: 0.5em;
   padding: 0 1em 1em;
 
-  font-size: 1.1em;
+  font-size: 1em;
 
   box-shadow: var(--shadow);
   background-color: var(--note-bg);
@@ -145,6 +145,8 @@ export default {
   width: 50vw;
   margin-top: 15%;
   z-index: 5;
+
+  font-size: 1.1em;
 }
 
 @media screen and (max-width: 550px) {
